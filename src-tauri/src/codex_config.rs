@@ -1114,11 +1114,19 @@ fn merge_live_non_managed_provider_sections(new_config: &str) -> Result<String, 
         }
 
         // This section exists in live but not in the new config — preserve it.
+        // Ensure `name` is always present (Codex requires it).
+        let mut patched_section = live_section.clone();
+        if let Some(table) = patched_section.as_table_like_mut() {
+            if !table.contains_key("name") {
+                table.insert("name", toml_edit::Item::Value(toml_edit::Value::from(id)));
+            }
+        }
+
         if let Some(new_providers) = new_doc
             .get_mut("model_providers")
             .and_then(|item| item.as_table_like_mut())
         {
-            new_providers.insert(id, live_section.clone());
+            new_providers.insert(id, patched_section);
         }
     }
 
