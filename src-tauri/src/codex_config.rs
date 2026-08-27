@@ -1074,7 +1074,7 @@ pub(crate) fn is_custom_codex_model_provider_id(id: &str) -> bool {
 /// that are NOT present in the new config (i.e., not managed by CC Switch),
 /// and merges them back in. This preserves user-added provider aliases that
 /// old Codex threads may reference.
-fn merge_live_non_managed_provider_sections(new_config: &str) -> Result<String, AppError> {
+pub fn merge_live_non_managed_provider_sections(new_config: &str) -> Result<String, AppError> {
     if new_config.trim().is_empty() {
         return Ok(new_config.to_string());
     }
